@@ -1,0 +1,22 @@
+.App {
+  min-height: 100vh;
+  height: 100%;
+  width: 100vw;
+  background-color: #DDDDDD;
+  display: flex;
+  flex-direction: row;
+}
+
+.App .right {
+  flex: 70%;
+  height: 100%;
+}
+
+.content {
+  padding: 20px;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}

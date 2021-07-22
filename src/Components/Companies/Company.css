@@ -1,0 +1,11 @@
+.panel-layout {
+    display: flex;
+}
+
+.table {
+    flex: 60%;
+}
+
+.side-panel {
+    flex: 40%;
+}

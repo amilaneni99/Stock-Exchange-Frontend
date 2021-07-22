@@ -1,0 +1,35 @@
+.container {
+    padding: 43px;
+}
+
+#redBg {
+    background-color: #30475E;
+    color: white;
+}
+
+#whiteBg {
+    background-color: white;
+}
+
+.mediumText {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+::-webkit-datetime-edit-year-field:not([aria-valuenow]),
+::-webkit-datetime-edit-month-field:not([aria-valuenow]),
+::-webkit-datetime-edit-day-field:not([aria-valuenow]) {
+    color: transparent;
+}
+
+.largeText {
+    font-size: 30px;
+    font-weight: 700;
+}
+
+#notFound {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
