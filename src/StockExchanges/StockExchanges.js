@@ -40,7 +40,7 @@ function StockExchanges() {
             method: 'GET',
             headers: { 'Accept': 'application/json' }
         };
-        const response = await fetch('http://localhost:8080/api/v1/stockexchange', requestOptions)
+        const response = await fetch('https://stockexchangeapp.herokuapp.com/api/v1/stockexchange', requestOptions)
         setStockExchangesData(await response.json());
     }
 
@@ -74,7 +74,7 @@ function StockExchanges() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(values)
             };
-            fetch('http://localhost:8080/api/v1/stockexchange', requestOptions)
+            fetch('http://stockexchangeapp.herokuapp.com/api/v1/stockexchange', requestOptions)
                 .then(response => response.json())
                 .then(data => {
                     console.log(data);

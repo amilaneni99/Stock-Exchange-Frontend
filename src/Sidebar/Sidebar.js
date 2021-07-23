@@ -3,12 +3,13 @@ import { Link, NavLink } from 'react-router-dom';
 import '../Sidebar/Sidebar.css';
 import { SidebarData } from './SidebarData';
 
-function Sidebar() {
+function Sidebar(props) {
+    const {admin} = props;
     return (
         <div className="Sidebar">
             <div className="brand">Stocked</div>
             <ul className="SidebarList">
-                {SidebarData(false).map((val, key) => {
+                {SidebarData(admin).map((val, key) => {
                     return (
                         <NavLink 
                             to={val.link}

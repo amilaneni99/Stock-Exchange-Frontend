@@ -93,11 +93,19 @@ function Import() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(json)
     };
-    fetch('http://localhost:8081/api/v1/stockprices', requestOptions)
+    fetch('https://stockprice-app.herokuapp.com/api/v1/stockprices', requestOptions)
       .then(response => response.json())
       .then(data => {
         setSeverity("success");
-        setMessage("Successfully Imported Data");
+        if(data.failedEntries.length === json.length) {
+          setSeverity("error");
+          setMessage("Data has errors")
+        } else if(data.failedEntries.length > 0) {
+          setSeverity("error");
+          setMessage("Imported Data but few rows had errors");
+        } else {
+          setMessage("Successfully Imported Data");
+        }
         setOpenSnackBar(true);
         setImportSummary(data);
       })
@@ -132,7 +140,7 @@ function Import() {
       </div>
       {
         file && (! importSummary) &&
-        <div style={{ display: 'flex', flexDirection: 'row', justifyContent:'space-evenly',width:'70%' }}>
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent:'space-evenly',width:'80%' }}>
           <div style={{ display: 'flex', flexDirection: 'row', width:'30%'}}>
             <h4 style={{marginRight: '15px'}}>Name</h4>
             <h4>{file.name}</h4>
@@ -186,7 +194,7 @@ function Import() {
               <Paper>
                 <div style={{ textAlign: 'center', padding: '1px' }}>
                   <h4>Start Date</h4>
-                  <h4>{importSummary.startDateTime}</h4>
+                  <h4>{(importSummary.startDateTime)?importSummary.startDateTime:'N/A'}</h4>
                 </div>
               </Paper>
             </Grid>
@@ -194,7 +202,7 @@ function Import() {
               <Paper>
                 <div style={{ textAlign: 'center', padding: '1px' }}>
                   <h4>Last Date</h4>
-                  <h4>{importSummary.lastDateTime}</h4>
+                  <h4>{(importSummary.lastDateTime)?importSummary.lastDateTime:'N/A'}</h4>
                 </div>
               </Paper>
             </Grid>
@@ -202,7 +210,7 @@ function Import() {
               <Paper>
                 <div style={{ textAlign: 'center', padding: '1px' }}>
                   <h4>Missing Dates</h4>
-                  <h4>{(importSummary.missingDates.length !== 0) ? importSummary.missingDates.join() : 'N/A'}</h4>
+                  <h4>{(importSummary.missingDates) ? importSummary.missingDates.join() : 'N/A'}</h4>
                 </div>
               </Paper>
             </Grid>

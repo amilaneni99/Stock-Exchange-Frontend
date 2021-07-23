@@ -33,7 +33,7 @@ export default function CompanyPerformance() {
             method: 'GET',
             headers: { 'Accept': 'application/json' }
         };
-        fetch('http://localhost:8080/api/v1/companies/all', requestOptions)
+        fetch('https://stockexchangeapp.herokuapp.com/api/v1/companies/all', requestOptions)
             .then(response => response.json())
             .then(data => {
                 var companyOptions = [];
@@ -99,7 +99,7 @@ export default function CompanyPerformance() {
             method: 'GET',
             headers: { 'Accept': 'application/json' },
         };
-        fetch(`http://localhost:8081/api/v1/chartData/performance/byCompany?companyCode=${(index === 1)?values.firstCompanyCode:values.secondCompanyCode}&startDate=${values.startDate}&endDate=${values.endDate}`, requestOptions)
+        fetch(`https://stockprice-app.herokuapp.com/api/v1/chartData/performance/byCompany?companyCode=${(index === 1)?values.firstCompanyCode:values.secondCompanyCode}&startDate=${values.startDate}&endDate=${values.endDate}`, requestOptions)
             .then(response => response.json())
             .then(data => {
                 console.log(data);

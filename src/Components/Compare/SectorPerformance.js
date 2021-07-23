@@ -28,7 +28,7 @@ export default function SectorPerformance() {
             method: 'GET',
             headers: { 'Accept': 'application/json' }
         };
-        const response = await fetch('http://localhost:8080/api/v1/sectors', requestOptions)
+        const response = await fetch('https://stockexchangeapp.herokuapp.com/api/v1/sectors', requestOptions)
         setSectors(await response.json());
         console.log(sectors);
     }
@@ -66,7 +66,7 @@ export default function SectorPerformance() {
             method: 'GET',
             headers: { 'Accept': 'application/json' },
         };
-        fetch(`http://localhost:8081/api/v1/chartData/performance/bySector?sectorId=${values.sectorId}&startDate=${values.startDate}&endDate=${values.endDate}`, requestOptions)
+        fetch(`https://stockprice-app.herokuapp.com/api/v1/chartData/performance/bySector?sectorId=${values.sectorId}&startDate=${values.startDate}&endDate=${values.endDate}`, requestOptions)
             .then(response => response.json())
             .then(data => {
                 console.log(data);

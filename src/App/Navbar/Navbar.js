@@ -9,6 +9,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import { Avatar } from '@material-ui/core';
 import { deepOrange, deepPurple } from '@material-ui/core/colors';
+import UserAuthService from '../UserAuthService';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -37,8 +38,10 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function Navbar() {
+export default function Navbar(props) {
     const classes = useStyles();
+    const {initials} = props;
+    const {setUser, user} = UserAuthService();
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
 
@@ -54,7 +57,7 @@ export default function Navbar() {
                 window.location.href="/signup"
                 break;
             case 2:
-                sessionStorage.removeItem('token');
+                sessionStorage.removeItem('currentUser');
                 window.location.href="/"
                 break;
             default:
@@ -94,7 +97,7 @@ export default function Navbar() {
                             onClick={handleMenu}
                             color="inherit"
                         >
-                            <Avatar className={classes.orange}>AS</Avatar>
+                            <Avatar className={classes.orange}>{initials}</Avatar>
                         </IconButton>
                         <Menu
                             id="menu-appbar"

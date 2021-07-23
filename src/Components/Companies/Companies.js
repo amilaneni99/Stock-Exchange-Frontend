@@ -39,7 +39,7 @@ function Companies() {
             method: 'GET',
             headers: { 'Accept': 'application/json' }
         };
-        const response = await fetch('http://localhost:8080/api/v1/companies/all', requestOptions)
+        const response = await fetch('https://stockexchangeapp.herokuapp.com/api/v1/companies/all', requestOptions)
         setCompaniesData(await response.json());
         console.log(companiesData);
     }
@@ -73,7 +73,7 @@ function Companies() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(values)
             };
-            fetch('http://localhost:8080/api/v1/companies', requestOptions)
+            fetch('https://stockexchangeapp.herokuapp.com/api/v1/companies', requestOptions)
                 .then(response => response.json())
                 .then(data => {
                     console.log(data);

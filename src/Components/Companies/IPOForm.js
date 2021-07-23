@@ -33,7 +33,7 @@ function IPOForm(props) {
             method: 'GET',
             headers: { 'Accept': 'application/json' }
         };
-        const response = await fetch('http://localhost:8080/api/v1/stockexchange', requestOptions)
+        const response = await fetch('https://stockexchangeapp.herokuapp.com/api/v1/stockexchange', requestOptions)
         setExchanges(await response.json());
     }
 

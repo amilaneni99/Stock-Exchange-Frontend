@@ -59,7 +59,7 @@ function CompanyData(props) {
         var tempPrice = {}
         var tempStockData = {}
         codes.map(code => {
-            fetch(`http://localhost:8081/api/v1/chartData/performance/byCompany?companyCode=${code}&startDate=start&endDate=end`, requestOptions)
+            fetch(`https://stockprice-app.herokuapp.com/api/v1/chartData/performance/byCompany?companyCode=${code}&startDate=start&endDate=end`, requestOptions)
                 .then(response => response.json())
                 .then(data => {
                     var entries = [];
@@ -86,7 +86,7 @@ function CompanyData(props) {
             method: 'GET',
             headers: { 'Accept': 'application/json' }
         };
-        fetch(`http://localhost:8080/api/v1/companies/${id}`, requestOptions)
+        fetch(`https://stockexchangeapp.herokuapp.com/api/v1/companies/${id}`, requestOptions)
             .then(response => response.json())
             .then(data => {
                 setCompany(data);
@@ -122,7 +122,7 @@ function CompanyData(props) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(ipoDetails)
         };
-        fetch(`http://localhost:8080/api/v1/companies/${company.id}/addIPO`, requestOptions)
+        fetch(`https://stockexchangeapp.herokuapp.com/api/v1/companies/${company.id}/addIPO`, requestOptions)
             .then(response => response.json())
             .then(data => {
                 fetchCompany(company.id);
@@ -136,7 +136,7 @@ function CompanyData(props) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(mapDetails)
         };
-        fetch(`http://localhost:8080/api/v1/companies/mapExchange`, requestOptions)
+        fetch(`https://stockexchangeapp.herokuapp.com/api/v1/companies/mapExchange`, requestOptions)
             .then(response => {
                 fetchCompany(company.id);
             });
@@ -147,7 +147,7 @@ function CompanyData(props) {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' }
         };
-        fetch(`http://localhost:8080/api/v1/companies/${companyId}`, requestOptions)
+        fetch(`https://stockexchangeapp.herokuapp.com/api/v1/companies/${companyId}`, requestOptions)
             .then(response => {
                 window.location.href="/companies";
             });
@@ -159,7 +159,7 @@ function CompanyData(props) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(values)
         };
-        fetch(`http://localhost:8080/api/v1/companies/${company.id}`, requestOptions)
+        fetch(`https://stockexchangeapp.herokuapp.com/api/v1/companies/${company.id}`, requestOptions)
             .then(response => response.json())
             .then(data => {
                 fetchCompany(company.id);
