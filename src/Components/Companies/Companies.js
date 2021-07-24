@@ -6,6 +6,7 @@ import animationData from '../../lotties/loading2.json';
 import './Company.css';
 import CompanyForm from './CompanyForm';
 import ExpandableTable from './ExpandableTable';
+import UserAuthService from '../../App/UserAuthService';
 
 var init = [
     {
@@ -26,7 +27,7 @@ var init = [
     }
 ]
 
-function Companies() {
+function Companies({token, setToken}) {
 
     var isTesting = false;
 
@@ -37,11 +38,22 @@ function Companies() {
     async function fetchCompanies() {
         const requestOptions = {
             method: 'GET',
-            headers: { 'Accept': 'application/json' }
+            headers: { 
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
         };
-        const response = await fetch('https://stockexchangeapp.herokuapp.com/api/v1/companies/all', requestOptions)
-        setCompaniesData(await response.json());
-        console.log(companiesData);
+        fetch('https://stockexchangeapp.herokuapp.com/api/v1/companies/all', requestOptions)
+            .then(response => {
+                if(response.ok) {
+                    return response.json();
+                }
+                setToken(null);
+                window.location.href = "/";
+            })
+            .then(data => {
+                setCompaniesData(data);
+            })
     }
 
     useEffect(() => {
@@ -70,7 +82,10 @@ function Companies() {
         } else {
             var requestOptions = {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
                 body: JSON.stringify(values)
             };
             fetch('https://stockexchangeapp.herokuapp.com/api/v1/companies', requestOptions)
@@ -184,7 +199,7 @@ function Companies() {
                 openPopup={openPopup}
                 setOpenPopup={setOpenPopup}
                 title="Add Company">
-                <CompanyForm addCompany={addCompany} closeModal={(close) => {
+                <CompanyForm token={token} addCompany={addCompany} closeModal={(close) => {
                     if (close) setOpenPopup(false);
                 }} />
             </FormDialog>

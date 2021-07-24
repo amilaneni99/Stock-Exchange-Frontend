@@ -11,6 +11,7 @@ import charts from "fusioncharts/fusioncharts.charts";
 import ReactFusioncharts from "react-fusioncharts";
 import Lottie from 'react-lottie';
 import animationData from '../../lotties/loading2.json';
+import UserAuthService from '../../App/UserAuthService';
 
 
 // Resolves charts dependancy
@@ -39,6 +40,7 @@ function CompanyData(props) {
     const [currentCompanyCode, setCurrentCompanyCode] = useState(null);
     const [stockData, setStockData] = useState({});
     const history = useHistory();
+    const {setUser, user, setToken, token} = UserAuthService();
 
 
     const chart = {
@@ -54,7 +56,10 @@ function CompanyData(props) {
     function fetchPerfomance(codes) {
         const requestOptions = {
             method: 'GET',
-            headers: { 'Accept': 'application/json' }
+            headers: { 
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
         };
         var tempPrice = {}
         var tempStockData = {}
@@ -84,7 +89,7 @@ function CompanyData(props) {
     function fetchCompany(id) {
         const requestOptions = {
             method: 'GET',
-            headers: { 'Accept': 'application/json' }
+            headers: { 'Accept': 'application/json', 'Authorization': `Bearer ${token}` }
         };
         fetch(`https://stockexchangeapp.herokuapp.com/api/v1/companies/${id}`, requestOptions)
             .then(response => response.json())
@@ -119,7 +124,7 @@ function CompanyData(props) {
     function addIPO(ipoDetails) {
         var requestOptions = {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
             body: JSON.stringify(ipoDetails)
         };
         fetch(`https://stockexchangeapp.herokuapp.com/api/v1/companies/${company.id}/addIPO`, requestOptions)
@@ -133,7 +138,7 @@ function CompanyData(props) {
         mapDetails.companyId = company.id
         var requestOptions = {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
             body: JSON.stringify(mapDetails)
         };
         fetch(`https://stockexchangeapp.herokuapp.com/api/v1/companies/mapExchange`, requestOptions)
@@ -145,7 +150,7 @@ function CompanyData(props) {
     function handleDelete(companyId) {
         var requestOptions = {
             method: 'DELETE',
-            headers: { 'Content-Type': 'application/json' }
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }
         };
         fetch(`https://stockexchangeapp.herokuapp.com/api/v1/companies/${companyId}`, requestOptions)
             .then(response => {
@@ -156,7 +161,7 @@ function CompanyData(props) {
     function editCompany(values) {
         var requestOptions = {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
             body: JSON.stringify(values)
         };
         fetch(`https://stockexchangeapp.herokuapp.com/api/v1/companies/${company.id}`, requestOptions)
@@ -370,7 +375,7 @@ function CompanyData(props) {
                         openPopup={openPopup}
                         setOpenPopup={setOpenPopup}
                         title="Add IPO">
-                        <IPOForm addIPO={addIPO} closeModal={(close) => {
+                        <IPOForm token={token} addIPO={addIPO} closeModal={(close) => {
                             if (close) setOpenPopup(false);
                         }} />
                     </FormDialog>
@@ -378,7 +383,7 @@ function CompanyData(props) {
                         openPopup={openMapDialog}
                         setOpenPopup={setOpenMapDialog}
                         title="Map Exchange">
-                        <MapForm mapCompany={mapCompany} closeModal={(close) => {
+                        <MapForm token={token} mapCompany={mapCompany} closeModal={(close) => {
                             if (close) setOpenMapDialog(false);
                         }} />
                     </FormDialog>
@@ -397,7 +402,7 @@ function CompanyData(props) {
                         openPopup={openEditDialog}
                         setOpenPopup={setOpenEditDialog}
                         title="Edit Company">
-                        <CompanyForm updateData={company} addCompany={editCompany} closeModal={(close) => {
+                        <CompanyForm token={token} updateData={company} addCompany={editCompany} closeModal={(close) => {
                             if (close) setOpenEditDialog(false);
                         }
                         } />

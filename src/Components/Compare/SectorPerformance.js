@@ -18,7 +18,7 @@ ReactFC.fcRoot(FusionCharts, PowerCharts, FusionTheme);
 
 
 
-export default function SectorPerformance() {
+export default function SectorPerformance({token}) {
     const [sectors, setSectors] = useState([])
     const [value, setValue] = useState(null);
     const [dataSource, setDataSource] = useState(null);
@@ -26,7 +26,7 @@ export default function SectorPerformance() {
     async function fetchSectors() {
         const requestOptions = {
             method: 'GET',
-            headers: { 'Accept': 'application/json' }
+            headers: { 'Accept': 'application/json', 'Authorization': `Bearer ${token}` }
         };
         const response = await fetch('https://stockexchangeapp.herokuapp.com/api/v1/sectors', requestOptions)
         setSectors(await response.json());
@@ -64,7 +64,7 @@ export default function SectorPerformance() {
     function fetchSectorPerformance(values) {
         var requestOptions = {
             method: 'GET',
-            headers: { 'Accept': 'application/json' },
+            headers: { 'Accept': 'application/json', 'Authorization': `Bearer ${token}` },
         };
         fetch(`https://stockprice-app.herokuapp.com/api/v1/chartData/performance/bySector?sectorId=${values.sectorId}&startDate=${values.startDate}&endDate=${values.endDate}`, requestOptions)
             .then(response => response.json())

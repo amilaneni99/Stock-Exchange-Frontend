@@ -26,7 +26,7 @@ const useStyles = makeStyles(theme => ({
 function CompanyForm(props) {
     const [sectors, setSectors] = useState([])
     const [value, setValue] = React.useState(null);
-    const { addCompany, closeModal, updateData } = props;
+    const { addCompany, closeModal, updateData, token } = props;
     const classes = useStyles();
 
     if(updateData) {
@@ -41,7 +41,7 @@ function CompanyForm(props) {
     async function fetchSectors() {
         const requestOptions = {
             method: 'GET',
-            headers: { 'Accept': 'application/json' }
+            headers: { 'Accept': 'application/json', 'Authorization': `Bearer ${token}` }
         };
         const response = await fetch('https://stockexchangeapp.herokuapp.com/api/v1/sectors', requestOptions)
         setSectors(await response.json());

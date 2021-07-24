@@ -19,7 +19,7 @@ import ReactFC from 'react-fusioncharts';
 ReactFC.fcRoot(FusionCharts, PowerCharts, FusionTheme);
 
 
-export default function CompanyPerformance() {
+export default function CompanyPerformance({token}) {
     const [companies, setCompanies] = useState([])
     const [firstCompany, setFirstCompany] = useState(null);
     const [secondCompany, setSecondCompany] = useState(null);
@@ -31,7 +31,7 @@ export default function CompanyPerformance() {
     async function fetchCompanies() {
         const requestOptions = {
             method: 'GET',
-            headers: { 'Accept': 'application/json' }
+            headers: { 'Accept': 'application/json', 'Authorization': `Bearer ${token}` }
         };
         fetch('https://stockexchangeapp.herokuapp.com/api/v1/companies/all', requestOptions)
             .then(response => response.json())
@@ -97,7 +97,7 @@ export default function CompanyPerformance() {
     function fetchCompanyPerformance(values, index) {
         var requestOptions = {
             method: 'GET',
-            headers: { 'Accept': 'application/json' },
+            headers: { 'Accept': 'application/json', 'Authorization': `Bearer ${token}` },
         };
         fetch(`https://stockprice-app.herokuapp.com/api/v1/chartData/performance/byCompany?companyCode=${(index === 1)?values.firstCompanyCode:values.secondCompanyCode}&startDate=${values.startDate}&endDate=${values.endDate}`, requestOptions)
             .then(response => response.json())

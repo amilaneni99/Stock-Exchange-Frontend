@@ -17,7 +17,7 @@ const init = [
     }
 ]
 
-function StockExchanges() {
+function StockExchanges({token, setToken}) {
 
     const isTesting = false;
 
@@ -38,25 +38,23 @@ function StockExchanges() {
     async function fetchSEs() {
         const requestOptions = {
             method: 'GET',
-            headers: { 'Accept': 'application/json' }
+            headers: { 
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
         };
-        const response = await fetch('https://stockexchangeapp.herokuapp.com/api/v1/stockexchange', requestOptions)
-        setStockExchangesData(await response.json());
+        fetch('https://stockexchangeapp.herokuapp.com/api/v1/stockexchange', requestOptions)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                setStockExchangesData(data);
+                setLoading(false);
+            })
     }
 
     useEffect(() => {
         fetchSEs();
     }, []);
-
-    useEffect(() => {
-        let timer = setTimeout(() => {
-            setLoading(false);
-        }, 2000);
-
-        return () => {
-            clearTimeout(timer);
-        }
-    }, [loading])
 
     const addStockExchange = (values) => {
         console.log(values);
@@ -66,15 +64,17 @@ function StockExchanges() {
             console.log(values);
             setLoading(true);
             init.push(values);
-            // setStockExchangesData(init);
             
         } else {
             var requestOptions = {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
                 body: JSON.stringify(values)
             };
-            fetch('http://stockexchangeapp.herokuapp.com/api/v1/stockexchange', requestOptions)
+            fetch('https://stockexchangeapp.herokuapp.com/api/v1/stockexchange', requestOptions)
                 .then(response => response.json())
                 .then(data => {
                     console.log(data);
@@ -125,7 +125,7 @@ function StockExchanges() {
                 <Button variant="contained" color="primary" onClick={() => setOpenPopup(true)}>Add Stock Exchange</Button>
             </div>
             {
-                !loading &&
+                !loading
                 (
                     <div className="element">
                         <ExpandableTable hasAction={false} isExpandable={false} data={stockExchangesData} fields={tableFields} />

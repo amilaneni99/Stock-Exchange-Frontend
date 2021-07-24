@@ -25,13 +25,16 @@ const useStyles = makeStyles(theme => ({
 function IPOForm(props) {
     const [exchanges, setExchanges] = useState([])
     const [selectedExchange, setSelectedExchange] = React.useState(null);
-    const { addIPO, closeModal } = props;
+    const { addIPO, closeModal, token } = props;
     const classes = useStyles();
 
     async function fetchExchanges() {
         const requestOptions = {
             method: 'GET',
-            headers: { 'Accept': 'application/json' }
+            headers: { 
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
         };
         const response = await fetch('https://stockexchangeapp.herokuapp.com/api/v1/stockexchange', requestOptions)
         setExchanges(await response.json());

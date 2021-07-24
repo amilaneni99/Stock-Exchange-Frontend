@@ -22,7 +22,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function Login(props) {
     const classes = useStyles();
-    const { setUser } = props;
+    const { setUser, setToken } = props;
 
     const validate = (fieldValues = values) => {
         let temp = { ...errors }
@@ -38,24 +38,44 @@ export default function Login(props) {
             return Object.values(temp).every(x => x === "")
     }
 
+    function parseJwt(token) {
+        var base64Url = token.split('.')[1];
+        var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        var jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        var subject = JSON.parse(jsonPayload);
+        setToken(token);
+        return subject.sub;
+    };
+
     function loginUser(credentials) {
-        return fetch(`https://stockexchangeapp.herokuapp.com/api/v1/user/login?email=${credentials.email}&password=${credentials.password}`, {
-            method: 'GET',
+        var payload = JSON.stringify({
+            username: credentials.email,
+            password: credentials.password
+        })
+        return fetch(`https://stockprice-app.herokuapp.com/api/v1/auth/authenticate?email=${credentials.email}&password=${credentials.password}`, {
+            method: 'POST',
             headers: {
-                'Accept': 'application/json'
-            }
+                'Content-Type': 'application/json'
+            },
+            body: payload
         })
             .then(response => {
                 console.log(response);
-                return response.json();
+                if(response.ok) {
+                    return response.json();
+                }
+                setUser(null);
+                setToken(null);
             })
             .then(data => {
-                console.log("value");
+                console.log(data);
                 if(data) {
-                    setUser(JSON.stringify(data));
-                    window.location.href = "/";
+                    setUser(parseJwt(data.jwtToken));
                 } else {
                     setUser(null);
+                    setToken(null);
                 }
             })
     }

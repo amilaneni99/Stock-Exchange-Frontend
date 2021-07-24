@@ -17,7 +17,7 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-export function Signup({setUser}) {
+export function Signup({setUser, token}) {
     const classes = useStyles();
 
     const validate = (fieldValues = values) => {
@@ -41,10 +41,10 @@ export function Signup({setUser}) {
         console.log(values);
         var requestOptions = {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
             body: JSON.stringify(values)
         };
-        fetch('http://stockexchangeapp.herokuapp.com/api/v1/setUser', requestOptions)
+        fetch('https://stockexchangeapp.herokuapp.com/api/v1/setUser', requestOptions)
             .then(response => response.json())
             .then(data => {
                 console.log(data);

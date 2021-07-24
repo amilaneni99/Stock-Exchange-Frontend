@@ -339,7 +339,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-function Compare() {
+function Compare({token}) {
     const classes = useStyles();
     const [value, setValue] = React.useState(0);
 
@@ -361,10 +361,10 @@ function Compare() {
                 </Tabs>
             </AppBar>
             <TabPanel value={value} index={0}>
-                <SectorPerformance />
+                <SectorPerformance token={token} />
             </TabPanel>
             <TabPanel value={value} index={1}>
-                <CompanyPerformance />
+                <CompanyPerformance token={token}/>
             </TabPanel>
         </div>
     )

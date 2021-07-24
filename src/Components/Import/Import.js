@@ -10,7 +10,7 @@ function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-function Import() {
+function Import({token}) {
 
   const [cols, setCols] = useState([]);
   const [openSnackBar, setOpenSnackBar] = useState(false);
@@ -90,7 +90,7 @@ function Import() {
     console.log(json);
     var requestOptions = {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
       body: JSON.stringify(json)
     };
     fetch('https://stockprice-app.herokuapp.com/api/v1/stockprices', requestOptions)
