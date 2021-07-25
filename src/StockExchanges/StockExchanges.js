@@ -40,7 +40,8 @@ function StockExchanges({token, setToken}) {
             method: 'GET',
             headers: { 
                 'Accept': 'application/json',
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${token}`,
+                'Access-Control-Allow-Origin': '*'
             }
         };
         fetch('https://stockexchangeapp.herokuapp.com/api/v1/stockexchange', requestOptions)
@@ -70,7 +71,8 @@ function StockExchanges({token, setToken}) {
                 method: 'POST',
                 headers: { 
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
+                    'Authorization': `Bearer ${token}`,
+                    'Access-Control-Allow-Origin': '*'
                 },
                 body: JSON.stringify(values)
             };
@@ -125,7 +127,7 @@ function StockExchanges({token, setToken}) {
                 <Button variant="contained" color="primary" onClick={() => setOpenPopup(true)}>Add Stock Exchange</Button>
             </div>
             {
-                !loading
+                !loading &&
                 (
                     <div className="element">
                         <ExpandableTable hasAction={false} isExpandable={false} data={stockExchangesData} fields={tableFields} />
