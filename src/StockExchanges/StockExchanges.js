@@ -17,7 +17,7 @@ const init = [
     }
 ]
 
-function StockExchanges({token, setToken}) {
+function StockExchanges({token, user, setToken}) {
 
     const isTesting = false;
 
@@ -123,9 +123,12 @@ function StockExchanges({token, setToken}) {
 
     return (
         <div>
-            <div className="element">
-                <Button variant="contained" color="primary" onClick={() => setOpenPopup(true)}>Add Stock Exchange</Button>
-            </div>
+            {
+                user && user.admin &&
+                <div className="element">
+                    <Button variant="contained" color="primary" onClick={() => setOpenPopup(true)}>Add Stock Exchange</Button>
+                </div>
+            }
             {
                 !loading &&
                 (

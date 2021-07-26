@@ -51,7 +51,7 @@ function App() {
                 <Switch>
                   <Route exact path="/profile" component={() => (<Profile setUser={setUser} setToken={setToken} token={token} user={userObj} />)} />
                   <Route exact path='/dashboard' component={() => (<Dashboard token={token}/>)} />
-                  <Route exact path="/stockExchanges" component={() => (<StockExchanges setToken={setToken} token={token}/>)} />
+                  <Route exact path="/stockExchanges" component={() => (<StockExchanges setToken={setToken} user={user} token={token}/>)} />
                   {
                     userObj.admin &&
                     <Route exact path='/import' component={() => (<Import token={token}/>)} />

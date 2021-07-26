@@ -10,6 +10,7 @@ import { useForm } from '../useForm';
 import SectorPerformance from './SectorPerformance';
 import CompanyPerformance from './CompanyPerformance';
 import { deepOrange } from '@material-ui/core/colors';
+import IndividualPerformance from './IndividualPerformance';
 
 // Resolves charts dependancy
 charts(FusionCharts);
@@ -357,7 +358,8 @@ function Compare({token}) {
                     aria-label="nav tabs example"
                 >
                     <LinkTab className={classes.orange} label="By Sector"  {...a11yProps(0)} />
-                    <LinkTab className={classes.orange} label="By Company" {...a11yProps(1)} />
+                    <LinkTab className={classes.orange} label="By Two Companies" {...a11yProps(1)} />
+                    <LinkTab className={classes.orange} label="By Company" {...a11yProps(2)} />
                 </Tabs>
             </AppBar>
             <TabPanel value={value} index={0}>
@@ -365,6 +367,9 @@ function Compare({token}) {
             </TabPanel>
             <TabPanel value={value} index={1}>
                 <CompanyPerformance token={token}/>
+            </TabPanel>
+            <TabPanel value={value} index={2}>
+                <IndividualPerformance token={token} />
             </TabPanel>
         </div>
     )
