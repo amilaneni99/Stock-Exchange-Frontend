@@ -32,7 +32,7 @@ function CompanyData(props) {
     const [company, setCompany] = useState(null);
     const [openEditDialog, setOpenEditDialog] = useState(false);
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
-    const [loading, setLoading] = useState(true)
+    const [loading, setLoading] = useState(false)
     const [openPopup, setOpenPopup] = useState(false)
     const [openMapDialog, setOpenMapDialog] = useState(false);
     const [dataSource, setDataSource] = useState({});
@@ -40,8 +40,7 @@ function CompanyData(props) {
     const [currentCompanyCode, setCurrentCompanyCode] = useState(null);
     const [stockData, setStockData] = useState({});
     const history = useHistory();
-    const {setUser, user, setToken, token} = UserAuthService();
-
+    const user = props.user;
 
     const chart = {
         caption: "Stock Price",
@@ -58,7 +57,7 @@ function CompanyData(props) {
             method: 'GET',
             headers: { 
                 'Accept': 'application/json',
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${props.token}`
             }
         };
         var tempPrice = {}
@@ -89,17 +88,22 @@ function CompanyData(props) {
     function fetchCompany(id) {
         const requestOptions = {
             method: 'GET',
-            headers: { 'Accept': 'application/json', 'Authorization': `Bearer ${token}` }
+            headers: { 'Accept': 'application/json', 'Authorization': `Bearer ${props.token}` }
         };
         fetch(`https://stockexchangeapp.herokuapp.com/api/v1/companies/${id}`, requestOptions)
             .then(response => response.json())
             .then(data => {
-                setCompany(data);
-                const companyCodes = data.companyStockExchangeMap.map(map => map.companyCode);
-                if (companyCodes.length > 0) {
-                    fetchPerfomance(companyCodes);
+                if(data.status === 404) {
+                    alert("Not found");
+                    window.location.href = "/companies";
+                } else {
+                    setCompany(data);
+                    const companyCodes = data.companyStockExchangeMap.map(map => map.companyCode);
+                    if (companyCodes.length > 0) {
+                        fetchPerfomance(companyCodes);
+                    }
+                    console.log(company);
                 }
-                console.log(company);
             })
     }
     
@@ -107,24 +111,10 @@ function CompanyData(props) {
         fetchCompany(props.match.params.id);
     }, [])
 
-    useEffect(() => {
-        var timer = setTimeout(() => {
-
-        }, 2000);
-        return () => {
-            clearTimeout(timer);
-        }
-    }, [loading]);
-
-    useEffect(() => {
-        
-        setLoading(false);
-    }, [company])
-
     function addIPO(ipoDetails) {
         var requestOptions = {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${props.token}` },
             body: JSON.stringify(ipoDetails)
         };
         fetch(`https://stockexchangeapp.herokuapp.com/api/v1/companies/${company.id}/addIPO`, requestOptions)
@@ -138,7 +128,7 @@ function CompanyData(props) {
         mapDetails.companyId = company.id
         var requestOptions = {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${props.token}` },
             body: JSON.stringify(mapDetails)
         };
         fetch(`https://stockexchangeapp.herokuapp.com/api/v1/companies/mapExchange`, requestOptions)
@@ -150,18 +140,18 @@ function CompanyData(props) {
     function handleDelete(companyId) {
         var requestOptions = {
             method: 'DELETE',
-            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${props.token}` }
         };
         fetch(`https://stockexchangeapp.herokuapp.com/api/v1/companies/${companyId}`, requestOptions)
             .then(response => {
-                window.location.href="/companies";
+                // window.location.href="/companies";
             });
     }
 
     function editCompany(values) {
         var requestOptions = {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${props.token}` },
             body: JSON.stringify(values)
         };
         fetch(`https://stockexchangeapp.herokuapp.com/api/v1/companies/${company.id}`, requestOptions)
@@ -191,7 +181,7 @@ function CompanyData(props) {
                         <Grid container spacing={1}>
                             <Grid item xs={6}>
                                 <Paper>
-                                    <div className="container">
+                                    <div className="container" style={{height: '400px'}}>
                                         <Grid container spacing={1}>
                                             <Grid item xs={12}>
                                                 <Grid container spacing={1}>
@@ -232,58 +222,109 @@ function CompanyData(props) {
                                 </Paper>
                             </Grid>
                             <Grid item xs={6} justifyContent='center'>
-                                <Grid item xs={12} justifyContent='center' alignItems='center' style={{ textAlign: 'center' }}>
-                                    <Paper style={{ padding: '20px 0px', marginBottom: '10px' }}>
-                                        <Grid item xs={12} justifyContent='center' alignItems='center' style={{ textAlign: 'center' }}>
-                                            <Button style={{ margin: '0px 10px 10px 0px', fontSize: '16px' }} variant="contained" color="primary" onClick={() => setOpenMapDialog(true)}>Map Company</Button>
-                                            <Button style={{ margin: '0px 10px 10px 0px', fontSize: '16px' }} variant="contained" color="secondary" onClick={() => setOpenEditDialog(true)}>Edit Company</Button>
-                                            <Button style={{ margin: '0px 10px 10px 0px', fontSize: '16px' }} color="secondary" onClick={() => setOpenDeleteDialog(true)}>Delete Company</Button>
-                                        </Grid>
-                                    </Paper>
-                                </Grid>
-                                <Paper></Paper>
+                                {
+                                    user && user.admin &&
+                                    <Grid item xs={12} justifyContent='center' alignItems='center' style={{ textAlign: 'center' }}>
+                                        <Paper style={{ padding: '20px 0px', marginBottom: '10px' }}>
+                                            <Grid item xs={12} justifyContent='center' alignItems='center' style={{ textAlign: 'center' }}>
+                                                <Button style={{ margin: '0px 10px 10px 0px', fontSize: '16px' }} variant="contained" color="primary" onClick={() => setOpenMapDialog(true)}>Map Company</Button>
+                                                <Button style={{ margin: '0px 10px 10px 0px', fontSize: '16px' }} variant="contained" color="secondary" onClick={() => setOpenEditDialog(true)}>Edit Company</Button>
+                                                <Button style={{ margin: '0px 10px 10px 0px', fontSize: '16px' }} color="secondary" onClick={() => setOpenDeleteDialog(true)}>Delete Company</Button>
+                                            </Grid>
+                                        </Paper>
+                                    </Grid>
+                                }
                                 <Paper>
-                                    <div style={{ width: '100%', padding: '20px 0px' }}>
-                                        <h2 style={{ textAlign: 'center' }}>IPO Details</h2>
-                                        {
-                                            (company.ipo == null) &&
-                                            <Grid>
-                                                <div className="container" id="notFound">
-                                                    <p style={{ fontSize: '24px' }}>No Upcoming IPOs!</p>
-                                                    <Button style={{ margin: '8px', fontSize: '16px' }} variant="contained" color="primary" onClick={() => setOpenPopup(true)}>Add IPO</Button>
-                                                </div>
-                                            </Grid>
-                                        }
-                                        {
-                                            (company.ipo != null) &&
-                                            <Grid container spacing={1} justifyContent="center">
-                                                <Grid item xs={12} sm={12} md={5}>
-                                                    <div>
-                                                        <p>Date & Time</p>
-                                                        <h4>{company.ipo.openDateTime}</h4>
+                                    {
+                                        user && user.admin &&
+                                        <div style={{ width: '100%', padding: '20px 0px', height: '300px' }}>
+                                            <h2 style={{ textAlign: 'center' }}>IPO Details</h2>
+                                            {
+                                                (company.ipo == null) &&
+                                                <Grid>
+                                                    <div className="container" id="notFound">
+                                                        <p style={{ fontSize: '24px' }}>No Upcoming IPOs!</p>
+                                                        {
+                                                            user && user.admin &&
+                                                            <Button style={{ margin: '8px', fontSize: '16px' }} variant="contained" color="primary" onClick={() => setOpenPopup(true)}>Add IPO</Button>
+                                                        }
                                                     </div>
                                                 </Grid>
-                                                <Grid item xs={12} sm={12} md={5}>
-                                                    <div>
-                                                        <p>Price per Share</p>
-                                                        <h4>{company.ipo.pricePerShare}</h4>
+                                            }
+                                            {
+                                                (company.ipo != null) &&
+                                                <Grid container spacing={1} justifyContent="center">
+                                                    <Grid item xs={12} sm={12} md={5}>
+                                                        <div>
+                                                            <p>Date & Time</p>
+                                                            <h4>{company.ipo.openDateTime}</h4>
+                                                        </div>
+                                                    </Grid>
+                                                    <Grid item xs={12} sm={12} md={5}>
+                                                        <div>
+                                                            <p>Price per Share</p>
+                                                            <h4>{company.ipo.pricePerShare}</h4>
+                                                        </div>
+                                                    </Grid>
+                                                    <Grid item xs={12} sm={12} md={5}>
+                                                        <div>
+                                                            <p>Total No. of Shares</p>
+                                                            <h4>{company.ipo.totalNumberOfShares}</h4>
+                                                        </div>
+                                                    </Grid>
+                                                    <Grid item xs={12} sm={12} md={5}>
+                                                        <div>
+                                                            <p>Stock Exchanges</p>
+                                                            <h4>{company.ipo.stockExchanges.map(exchange => exchange.code)}</h4>
+                                                        </div>
+                                                    </Grid>
+                                                </Grid>
+                                            }
+                                        </div>
+                                    }
+                                    {
+                                        user && !user.admin &&
+                                        <div style={{ width: '100%', padding: '20px 0px', height: '400px' }}>
+                                            <h2 style={{ textAlign: 'center' }}>IPO Details</h2>
+                                            {
+                                                (company.ipo == null) &&
+                                                <Grid>
+                                                    <div className="container" id="notFound">
+                                                        <p style={{ fontSize: '24px' }}>No Upcoming IPOs!</p>
                                                     </div>
                                                 </Grid>
-                                                <Grid item xs={12} sm={12} md={5}>
-                                                    <div>
-                                                        <p>Total No. of Shares</p>
-                                                        <h4>{company.ipo.totalNumberOfShares}</h4>
-                                                    </div>
+                                            }
+                                            {
+                                                (company.ipo != null) &&
+                                                <Grid container spacing={1} justifyContent="center">
+                                                    <Grid item xs={12} sm={12} md={5}>
+                                                        <div>
+                                                            <p>Date & Time</p>
+                                                            <h4>{company.ipo.openDateTime}</h4>
+                                                        </div>
+                                                    </Grid>
+                                                    <Grid item xs={12} sm={12} md={5}>
+                                                        <div>
+                                                            <p>Price per Share</p>
+                                                            <h4>{company.ipo.pricePerShare}</h4>
+                                                        </div>
+                                                    </Grid>
+                                                    <Grid item xs={12} sm={12} md={5}>
+                                                        <div>
+                                                            <p>Total No. of Shares</p>
+                                                            <h4>{company.ipo.totalNumberOfShares}</h4>
+                                                        </div>
+                                                    </Grid>
+                                                    <Grid item xs={12} sm={12} md={5}>
+                                                        <div>
+                                                            <p>Stock Exchanges</p>
+                                                            <h4>{company.ipo.stockExchanges.map(exchange => exchange.code)}</h4>
+                                                        </div>
+                                                    </Grid>
                                                 </Grid>
-                                                <Grid item xs={12} sm={12} md={5}>
-                                                    <div>
-                                                        <p>Stock Exchanges</p>
-                                                        <h4>{company.ipo.stockExchanges.map(exchange => exchange.code)}</h4>
-                                                    </div>
-                                                </Grid>
-                                            </Grid>
-                                        }
-                                    </div>
+                                            }
+                                        </div>
+                                    }
                                 </Paper>
                             </Grid>
                             <Grid item xs={6} style={{ backgroundColor: 'coral' }}>
@@ -329,11 +370,14 @@ function CompanyData(props) {
                             <Grid item xs={6}>
                                 {
                                     (company.companyStockExchangeMap.length == 0) &&
-                                    <div>
+                                    <div style={{height: '500px'}}>
                                         <Paper>
                                             <div className="container" id="notFound">
                                                 <p style={{ fontSize: '24px' }}>Not Listed yet!</p>
-                                                <Button style={{ margin: '8px', fontSize: '16px' }} variant="contained" color="primary" onClick={() => setOpenMapDialog(true)}>List Company</Button>
+                                                {
+                                                    user && user.admin &&
+                                                    <Button style={{ margin: '8px', fontSize: '16px' }} variant="contained" color="primary" onClick={() => setOpenMapDialog(true)}>List Company</Button>
+                                                }
                                             </div>
                                         </Paper>
                                     </div>
@@ -375,7 +419,7 @@ function CompanyData(props) {
                         openPopup={openPopup}
                         setOpenPopup={setOpenPopup}
                         title="Add IPO">
-                        <IPOForm token={token} addIPO={addIPO} closeModal={(close) => {
+                        <IPOForm token={props.token} addIPO={addIPO} closeModal={(close) => {
                             if (close) setOpenPopup(false);
                         }} />
                     </FormDialog>
@@ -383,7 +427,7 @@ function CompanyData(props) {
                         openPopup={openMapDialog}
                         setOpenPopup={setOpenMapDialog}
                         title="Map Exchange">
-                        <MapForm token={token} mapCompany={mapCompany} closeModal={(close) => {
+                        <MapForm token={props.token} mapCompany={mapCompany} closeModal={(close) => {
                             if (close) setOpenMapDialog(false);
                         }} />
                     </FormDialog>
@@ -402,7 +446,7 @@ function CompanyData(props) {
                         openPopup={openEditDialog}
                         setOpenPopup={setOpenEditDialog}
                         title="Edit Company">
-                        <CompanyForm token={token} updateData={company} addCompany={editCompany} closeModal={(close) => {
+                        <CompanyForm token={props.token} updateData={company} addCompany={editCompany} closeModal={(close) => {
                             if (close) setOpenEditDialog(false);
                         }
                         } />

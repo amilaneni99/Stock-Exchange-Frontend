@@ -3,8 +3,7 @@ import { useEffect, useState } from 'react';
 export default function UserAuthService() {
     
     const getUser = () => {
-        const userString = sessionStorage.getItem('currentUser');
-        const user = JSON.parse(userString);
+        const user = sessionStorage.getItem('currentUser');
         return user;
     };
 

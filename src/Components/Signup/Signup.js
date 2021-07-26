@@ -17,7 +17,7 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-export function Signup({setUser, token}) {
+export function Signup({setUser, setToken}) {
     const classes = useStyles();
 
     const validate = (fieldValues = values) => {
@@ -36,20 +36,33 @@ export function Signup({setUser, token}) {
             return Object.values(temp).every(x => x === "")
     }
 
+    function parseJwt(token) {
+        var base64Url = token.split('.')[1];
+        var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        var jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        var subject = JSON.parse(jsonPayload);
+        return subject.sub;
+    };
 
     function addUser(values) {
         console.log(values);
         var requestOptions = {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(values)
         };
-        fetch('https://stockexchangeapp.herokuapp.com/api/v1/setUser', requestOptions)
+        fetch('https://stockprice-app.herokuapp.com/api/v1/auth/setUser', requestOptions)
             .then(response => response.json())
             .then(data => {
-                console.log(data);
-                setUser(JSON.stringify(data));
-                window.location.href = "/login";
+                if(data.status && data.status !== 200) {
+                    console.log(data);
+                } else {
+                    setToken(data.jwtToken);
+                    setUser(parseJwt(data.jwtToken));
+                    window.location.href = "/login";
+                }
             })
     }
 

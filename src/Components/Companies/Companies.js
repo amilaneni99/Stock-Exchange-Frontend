@@ -1,4 +1,4 @@
-import { Button } from '@material-ui/core';
+import { Button, TextField } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import FormDialog from '../../StockExchanges/Modal';
 import Lottie from 'react-lottie';
@@ -7,6 +7,7 @@ import './Company.css';
 import CompanyForm from './CompanyForm';
 import ExpandableTable from './ExpandableTable';
 import UserAuthService from '../../App/UserAuthService';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 
 var init = [
     {
@@ -27,13 +28,25 @@ var init = [
     }
 ]
 
-function Companies({token, setToken}) {
+function Companies({token, setToken, user}) {
 
     var isTesting = false;
 
     const [openPopup, setOpenPopup] = useState(false);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [companies, setCompanies] = useState([]);
     const [companiesData, setCompaniesData] = useState((isTesting)?init:[]);
+    const [selectedCompany, setSelectedCompany] = useState(null);
+
+
+    useEffect(() => {
+        if(selectedCompany == null) {
+            setCompaniesData(companies);
+        } else {
+            setCompaniesData([selectedCompany]);
+        }
+    }, [selectedCompany])
+
 
     async function fetchCompanies() {
         const requestOptions = {
@@ -53,6 +66,8 @@ function Companies({token, setToken}) {
             })
             .then(data => {
                 setCompaniesData(data);
+                setCompanies(data);
+                setLoading(false);
             })
     }
 
@@ -60,15 +75,15 @@ function Companies({token, setToken}) {
         fetchCompanies();
     }, []);
 
-    useEffect(() => {
-        let timer = setTimeout(() => {
-            setLoading(false);
-        }, 2000);
+    // useEffect(() => {
+    //     let timer = setTimeout(() => {
+    //         setLoading(false);
+    //     }, 2000);
 
-        return () => {
-            clearTimeout(timer);
-        }
-    }, [loading])
+    //     return () => {
+    //         clearTimeout(timer);
+    //     }
+    // }, [loading])
     
     const addCompany = (values) => {
         console.log(values);
@@ -154,15 +169,35 @@ function Companies({token, setToken}) {
 
     return (
         <div>
-            <div className="element">
-                <Button variant="contained" color="primary" onClick={() => setOpenPopup(true)}>Add Company</Button>
-            </div>
+            {
+                user && user.admin && 
+                <div className="element">
+                    <Button variant="contained" color="primary" onClick={() => setOpenPopup(true)}>Add Company</Button>
+                </div>
+            }
+            {
+                !loading &&
+                <div className="element">
+                    <Autocomplete
+                        value={selectedCompany}
+                        onChange={(event, newValue) => {
+                            setSelectedCompany(newValue);
+                            console.log(selectedCompany);
+                        }}
+                        options={companies}
+                        name="sector"
+                        getOptionLabel={(option) => option.companyName}
+                        renderInput={(params) => <TextField {...params} label="Select Sector" variant="outlined" />}
+                    />
+                </div>
+            }
             {
                 !loading &&
                 (
                     <div className="element">
                         <ExpandableTable 
-                            data={companiesData.map((val, key) => {
+                            data={
+                                companiesData.map((val, key) => {
                                 var tempCompany = {};
                                 tempCompany.id = val.id;
                                 tempCompany.companyName = val.companyName;

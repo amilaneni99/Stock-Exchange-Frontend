@@ -5,11 +5,6 @@ export const SidebarData = (admin) => {
     if(admin === true) {
         return [
             {
-                title: "Dashboard",
-                icon: <Dashboard />,
-                link: "/home"
-            },
-            {
                 title: "Stock Exchanges",
                 icon: <ShowChart />,
                 link: "/stockExchanges"
@@ -20,6 +15,11 @@ export const SidebarData = (admin) => {
                 link: "/companies"
             },
             {
+                title: "IPOs",
+                icon: <Dashboard />,
+                link: "/dashboard"
+            },
+            {
                 title: "Import Data",
                 icon: <Backup />,
                 link: "/import"
@@ -27,11 +27,6 @@ export const SidebarData = (admin) => {
         ];
     } else {
         return [
-            {
-                title: "Dashboard",
-                icon: <Dashboard />,
-                link: "/dashboard"
-            },
             {
                 title: "Stock Exchanges",
                 icon: <ShowChart />,
@@ -41,6 +36,11 @@ export const SidebarData = (admin) => {
                 title: "Compare",
                 icon: <Compare />,
                 link: "/compare"
+            },
+            {
+                title: "IPOs",
+                icon: <Dashboard />,
+                link: "/dashboard"
             },
             {
                 title: "Companies",

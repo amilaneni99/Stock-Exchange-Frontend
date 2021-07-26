@@ -54,33 +54,17 @@ export default function Navbar(props) {
         setAnchorEl(null);
         switch (index) {
             case 1:
-                window.location.href="/signup"
+                window.location.href="/profile"
                 break;
             case 2:
                 sessionStorage.removeItem('currentUser');
+                sessionStorage.removeItem('token');
                 window.location.href="/"
                 break;
             default:
                 break;
         }
     }
-
-    // const handleClick = (index) => {
-    //     switch (index) {
-    //         case 0:
-    //             setAnchorEl(null);
-    //             break;
-    //         case 1:
-    //             window.location.href="profile";
-    //             break;
-    //         case 2:
-    //             // sessionStorage.removeItem('token');
-    //             window.location.href="/";
-    //             break;
-    //         default:
-    //             break;
-    //     }
-    // };
 
     return (
         <div className={classes.root}>

@@ -5,7 +5,6 @@ import useToken from './UserAuthService';
 import Sidebar from '../Sidebar/Sidebar';
 import Navbar from './Navbar/Navbar';
 import { Route, BrowserRouter as Router, Switch, BrowserRouter, Redirect } from 'react-router-dom';
-import { Dashboard } from '@material-ui/icons';
 import Import from '../Components/Import/Import';
 import Companies from '../Components/Companies/Companies';
 import StockExchanges from '../StockExchanges/StockExchanges';
@@ -15,11 +14,16 @@ import PrivateRoute from './PrivateRoute';
 import { useEffect, useState } from 'react';
 import NotConfirmedUser from '../Components/Login/NotConfirmedUser';
 import UserAuthService from './UserAuthService';
+import Dashboard from '../Components/Dashboard/Dashboard';
+import Profile from '../Components/Profile/Profile';
 
 
 function App() {
 
   const {setUser, user, setToken, token} = UserAuthService();
+  const userObj = JSON.parse(user);
+  const allowedRoutesByUser = ['/profile', '/companies', '/companies/:id', 'stockExchanges', '/compare'];
+  const allowedRoutesByAdmin = allowedRoutesByUser.concat(['/import']); 
 
   return (
     <div className="App">
@@ -40,18 +44,22 @@ function App() {
         {
           user && token &&
           <>
-            <Sidebar admin={true}/>
+            <Sidebar admin={userObj.admin}/>
             <div className="right">
-              <Navbar initials={(user.name) ? user.name.substring(0,2).toUpperCase() : null}/>
+              <Navbar initials={userObj.name.substring(0,2).toUpperCase()}/>
               <div className="content">
                 <Switch>
-                  <Route exact path='/' component={() => (<Dashboard token={token}/>)} />
+                  <Route exact path="/profile" component={() => (<Profile setUser={setUser} setToken={setToken} token={token} user={userObj} />)} />
+                  <Route exact path='/dashboard' component={() => (<Dashboard token={token}/>)} />
                   <Route exact path="/stockExchanges" component={() => (<StockExchanges setToken={setToken} token={token}/>)} />
-                  <Route exact path='/import' component={() => (<Import token={token}/>)} />
-                  <Route exact path='/companies/:id' component={() => (<CompanyData token={token} />)} />
-                  <Route exact path='/companies' component={() => (<Companies token={token}/>)} />
+                  {
+                    userObj.admin &&
+                    <Route exact path='/import' component={() => (<Import token={token}/>)} />
+                  }
+                  <Route exact path='/companies/:id' component={(matchProps) => (<CompanyData {...matchProps} token={token} user={userObj}/>)} />
+                  <Route exact path='/companies' component={() => (<Companies token={token} user={userObj} setToken={setToken}/>)} />
                   <Route exact path='/compare' component={() => (<Compare token={token} />)} />
-                  <Route render={({ location }) => (['/login', '/signup', '/not-confirmed'].includes(location.pathname)) ?
+                  <Route render={({ location }) => (!(userObj.admin? allowedRoutesByAdmin:allowedRoutesByUser).includes(location.pathname)) ?
                     <Redirect to='/dashboard' />
                     :
                     null

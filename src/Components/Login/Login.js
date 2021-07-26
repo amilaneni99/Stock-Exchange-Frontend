@@ -26,8 +26,8 @@ export default function Login(props) {
 
     const validate = (fieldValues = values) => {
         let temp = { ...errors }
-        if ('email' in fieldValues)
-            temp.email = fieldValues.email ? "" : "This field is required."
+        // if ('email' in fieldValues)
+        //     temp.email = fieldValues.email ? "" : "This field is required."
         if ('password' in fieldValues)
             temp.email = fieldValues.email ? "" : "This field is required."
         setErrors({
@@ -119,6 +119,7 @@ export default function Login(props) {
                         <Grid container spacing={2} justifyContent='center'>
                             <Grid item sm={8} style={{ textAlign: 'center' }}>
                                 <TextField
+                                    required
                                     style={{ width: '100%' }}
                                     id="filled-required"
                                     label="Email"
@@ -127,8 +128,6 @@ export default function Login(props) {
                                     value={values.email}
                                     name="email"
                                     onChange={handleInputChange}
-                                    error={errors.email}
-                                    helperText={errors.email}
                                 />
                             </Grid>
                             <Grid item sm={8} style={{ textAlign: 'center' }}>
