@@ -24,6 +24,11 @@ export const SidebarData = (admin) => {
                 icon: <Backup />,
                 link: "/import"
             },
+            {
+                title: "Compare",
+                icon: <Compare />,
+                link: "/compare"
+            }
         ];
     } else {
         return [

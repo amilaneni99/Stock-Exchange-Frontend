@@ -1,4 +1,4 @@
-import { Button } from '@material-ui/core'
+import { Button, makeStyles } from '@material-ui/core'
 import React, { useEffect, useState } from 'react'
 import MaterialTable from '../CollapsibleTable/MaterialTable'
 import StockExchangeForm from './StockExchangeForm';
@@ -17,9 +17,28 @@ const init = [
     }
 ]
 
+const useStyles = makeStyles({
+    button: {
+        '& > .MuiButton-containedPrimary:hover': {
+            backgroundColor: '#E84545'
+        },
+        '& .MuiButton-containedPrimary': {
+            backgroundColor: '#E84545'
+        },
+        '& > .MuiButton-contained': {
+            backgroundColor: '#E84545'
+        },
+        '& .MuiButtonBase-root': {
+            backgroundColor: '#E84545'
+        }
+    },
+});
+
 function StockExchanges({token, user, setToken}) {
 
     const isTesting = false;
+
+    const classes = useStyles();
 
 
     const defaultLottieOptions = {
@@ -126,7 +145,7 @@ function StockExchanges({token, user, setToken}) {
             {
                 user && user.admin &&
                 <div className="element">
-                    <Button variant="contained" color="primary" onClick={() => setOpenPopup(true)}>Add Stock Exchange</Button>
+                    <Button className={classes.button} variant="contained" color="secondary" onClick={() => setOpenPopup(true)}>Add Stock Exchange</Button>
                 </div>
             }
             {

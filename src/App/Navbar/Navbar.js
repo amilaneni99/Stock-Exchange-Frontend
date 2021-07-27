@@ -29,8 +29,8 @@ const useStyles = makeStyles((theme) => ({
         flexDirection:'row'
     },
     orange: {
-        color: theme.palette.getContrastText(deepOrange[500]),
-        backgroundColor: deepOrange[500],
+        color: theme.palette.getContrastText('#E84545'),
+        backgroundColor: '#E84545',
     },
     purple: {
         color: theme.palette.getContrastText(deepPurple[500]),
@@ -70,8 +70,8 @@ export default function Navbar(props) {
         <div className={classes.root}>
             <AppBar position="static">
                 <Toolbar className={classes.container}>
-                    <Typography variant="h6" className={classes.title}>
-                        Stock Exchange Application
+                    <Typography style={{fontFamily: 'Zen Tokyo Zoo, cursive', fontSize: '48px'}} variant="h6" className={classes.title}>
+                        Stocked
                     </Typography>
                     <div>
                         <IconButton

@@ -1,6 +1,6 @@
 .Sidebar {
   width: 250px;
-  background-color: #30475E;
+  background-color: #060930;
 }
 
 .SidebarList {
@@ -13,7 +13,7 @@
 .SidebarList .row {
   width: 100%;
   height: 50px;
-  background-color: rgb(48, 71, 94);
+  background-color: #060930;
   list-style-type: none;
   text-decoration: none;
   margin: 0;
@@ -27,11 +27,13 @@
 
 .SidebarList .row:hover {
   cursor: pointer;
-  background-color: #060930;
+  background-color: #2f315a;
 }
 
 .SidebarList .active {
-  background-color: #060930;
+  border-right: 5px solid #E84545;
+  transform: translateX(-5px);
+  background-color: #2f315a;
 }
 
 .row #icon {
@@ -46,11 +48,13 @@
 }
 
 .brand {
-  height: 70px; 
+  height: 160px; 
   width: 100%;
+  margin: 20px 0px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 24px;
+  font-size: 36px;
   color: white;
+  font-family: 'Zen Tokyo Zoo', cursive;
 }

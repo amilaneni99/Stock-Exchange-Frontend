@@ -335,8 +335,8 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: theme.palette.background.paper,
     },
     orange: {
-        color: theme.palette.getContrastText(deepOrange[500]),
-        backgroundColor: deepOrange[500],
+        color: theme.palette.getContrastText('#060930'),
+        backgroundColor: '#060930',
     }
 }));
 

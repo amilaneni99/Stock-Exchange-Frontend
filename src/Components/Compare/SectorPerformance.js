@@ -164,7 +164,7 @@ export default function SectorPerformance({token}) {
                             />
                         </Grid>
                         <Grid xs={2} justifyContent='center' alignItems='center'>
-                            <Button variant="contained" type="submit" color="primary" style={{ width: '80px', transform: 'translatey(7px)' }}>Fetch</Button>
+                            <Button variant="contained" type="submit" color="secondary" style={{ width: '80px', transform: 'translatey(7px)' }}>Fetch</Button>
                         </Grid>
                     </form>
                 </Grid>

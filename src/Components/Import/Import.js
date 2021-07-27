@@ -135,7 +135,7 @@ function Import({token}) {
             accept={SheetJSFT}
             name="sheet"
           />
-          <Button style={{ margin: '8px', fontSize: '16px' }} type="submit" variant="outlined" color="primary">Upload</Button>
+          <Button style={{ margin: '8px', fontSize: '16px' }} type="submit" variant="contained" color="secondary">Upload</Button>
         </form>
       </div>
       {

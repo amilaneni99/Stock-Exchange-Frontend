@@ -16,7 +16,7 @@ import NotConfirmedUser from '../Components/Login/NotConfirmedUser';
 import UserAuthService from './UserAuthService';
 import Dashboard from '../Components/Dashboard/Dashboard';
 import Profile from '../Components/Profile/Profile';
-
+import { createTheme } from '@material-ui/core';
 
 function App() {
 
@@ -51,7 +51,7 @@ function App() {
                 <Switch>
                   <Route exact path="/profile" component={() => (<Profile setUser={setUser} setToken={setToken} token={token} user={userObj} />)} />
                   <Route exact path='/dashboard' component={() => (<Dashboard token={token}/>)} />
-                  <Route exact path="/stockExchanges" component={() => (<StockExchanges setToken={setToken} user={user} token={token}/>)} />
+                  <Route exact path="/stockExchanges" component={() => (<StockExchanges setToken={setToken} user={userObj} token={token}/>)} />
                   {
                     userObj.admin &&
                     <Route exact path='/import' component={() => (<Import token={token}/>)} />

@@ -1,4 +1,4 @@
-import { Button, TextField } from '@material-ui/core';
+import { Button, makeStyles, TextField } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import FormDialog from '../../StockExchanges/Modal';
 import Lottie from 'react-lottie';
@@ -28,6 +28,14 @@ var init = [
     }
 ]
 
+const useStyles = makeStyles(theme => ({
+    root: {
+        '& .MuiFormLabel-root': {
+            color: '#060930'
+        }
+    }
+}))
+
 function Companies({token, setToken, user}) {
 
     var isTesting = false;
@@ -37,6 +45,7 @@ function Companies({token, setToken, user}) {
     const [companies, setCompanies] = useState([]);
     const [companiesData, setCompaniesData] = useState((isTesting)?init:[]);
     const [selectedCompany, setSelectedCompany] = useState(null);
+    const classes = useStyles();
 
 
     useEffect(() => {
@@ -172,13 +181,14 @@ function Companies({token, setToken, user}) {
             {
                 user && user.admin && 
                 <div className="element">
-                    <Button variant="contained" color="primary" onClick={() => setOpenPopup(true)}>Add Company</Button>
+                    <Button variant="contained" color="secondary" onClick={() => setOpenPopup(true)}>Add Company</Button>
                 </div>
             }
             {
                 !loading &&
                 <div className="element">
                     <Autocomplete
+                        className = {classes.root}
                         value={selectedCompany}
                         onChange={(event, newValue) => {
                             setSelectedCompany(newValue);

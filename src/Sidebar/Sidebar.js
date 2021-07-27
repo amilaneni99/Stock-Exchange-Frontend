@@ -1,13 +1,15 @@
+import { Dashboard } from '@material-ui/icons';
 import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import '../Sidebar/Sidebar.css';
+import Logo from './logo.png';
 import { SidebarData } from './SidebarData';
 
 function Sidebar(props) {
     const {admin} = props;
     return (
         <div className="Sidebar">
-            <div className="brand">Stocked</div>
+            <div className="brand"><img style={{height:'100px', width:'100px'}} src={Logo} alt="Logo" /></div>
             <ul className="SidebarList">
                 {SidebarData(admin).map((val, key) => {
                     return (

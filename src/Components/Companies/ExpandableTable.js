@@ -22,7 +22,13 @@ const useRowStyles = makeStyles({
     '& > *': {
       borderBottom: 'unset',
     },
-  },
+    '& .MuiIconButton-root': {
+      color: '#E84545'
+    },
+    '& .MuiTableCell-head': {
+      color: '#E84545'
+    }
+  }
 });
 
 function Row(props) {
@@ -32,8 +38,8 @@ function Row(props) {
   const history = useHistory();
 
   return (
-    <React.Fragment>
-      <TableRow className={classes.root}>
+    <React.Fragment className={classes.root}>
+      <TableRow>
         {
           expandable &&
           <TableCell>
@@ -96,6 +102,7 @@ function Row(props) {
 export default function ExpandableTable(props) {
 
   const {data, fields, isExpandable, hasAction} = props;
+  const classes = useRowStyles();
 
   console.log(props);
 
@@ -105,7 +112,7 @@ export default function ExpandableTable(props) {
   });
 
   return (
-    <TableContainer component={Paper}>
+    <TableContainer className={classes.root} component={Paper}>
       <Table aria-label="collapsible table">
         <TableHead>
           <TableRow>
