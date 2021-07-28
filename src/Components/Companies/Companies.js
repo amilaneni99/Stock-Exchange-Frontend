@@ -197,7 +197,7 @@ function Companies({token, setToken, user}) {
                         options={companies}
                         name="sector"
                         getOptionLabel={(option) => option.companyName}
-                        renderInput={(params) => <TextField {...params} label="Select Sector" variant="outlined" />}
+                        renderInput={(params) => <TextField {...params} label="Select Company" variant="outlined" />}
                     />
                 </div>
             }
